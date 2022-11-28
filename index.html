@@ -13,8 +13,14 @@
 <body>
   文件：<br>
   <input type="file" id="file"><br>
+  <hr>
+  <button type="button" id="btn">复制内容</button>
+  <input type="text" id="input" value="" style="opacity: 0;" />
+  <!--<p><code>copy(excelDate)</code></p>-->
 </body>
 <script>
+  // 全局用数据
+  var excelDate;
   //首先监听input框的变动，选中一个新的文件会触发change事件
   document.querySelector("#file").addEventListener("change", function () {
     //获取到选中的文件
@@ -37,8 +43,24 @@
         result.push(...newData)
       }
       console.log('result', result)
+      excelDate = result;
     }
   });
+  var input = document.querySelector("#input");
+  input.addEventListener("copy", function (event) {
+    var clipboardData = event.clipboardData || window.clipboardData;
+    var text = JSON.stringify(excelDate);
+    // console.log(text);
+    event.preventDefault();
+    // 这里设置实际复制内容
+    clipboardData.setData("text/plain", text);
+  });
+  document.getElementById("btn").addEventListener("click", function () {
+    input.select();
+    // 执行复制操作
+    document.execCommand("copy");
+  });
+  
 </script>
 
 </html>
